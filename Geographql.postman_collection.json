@@ -1,0 +1,455 @@
+{
+	"info": {
+		"_postman_id": "32a3316e-5e19-42dc-bd50-0dc88287bddf",
+		"name": "Geographql",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41932705"
+	},
+	"item": [
+		{
+			"name": "Cities",
+			"item": [
+				{
+					"name": "City (Patrícia)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\r\n  city(id: 1) {\r\n    id\r\n    name\r\n    \r\n  }\r\n}\r\n",
+								"variables": "{\r\n  \"id\": 1\r\n}\r\n"
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}",
+							"host": [
+								"{{baseurl}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Countries",
+			"item": [
+				{
+					"name": "Country (Tatiana)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Testar se o status code da resposta é 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Validar o contrato do schema \r",
+									"pm.test(\"Schema é válido\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var country = jsonData.data.country;\r",
+									"\r",
+									"    pm.expect(country).to.have.property(\"id\");\r",
+									"    pm.expect(country).to.have.property(\"name\");\r",
+									"    pm.expect(country).to.have.property(\"iso2\");\r",
+									"    pm.expect(country).to.have.property(\"capital\");\r",
+									"    pm.expect(country).to.have.property(\"tld\");\r",
+									"    pm.expect(country).to.have.property(\"currency\");\r",
+									"    pm.expect(country).to.have.property(\"currency_symbol\");\r",
+									"    pm.expect(country).to.have.property(\"emoji\");\r",
+									"    pm.expect(country).to.have.property(\"states\");\r",
+									"\r",
+									"    // Validar a estrutura de 'states'\r",
+									"    pm.expect(country.states).to.have.property(\"totalCount\");\r",
+									"    pm.expect(country.states).to.have.property(\"edges\");\r",
+									"    pm.expect(country.states.edges).to.be.an(\"array\");\r",
+									"\r",
+									"    if (country.states.edges.length > 0) {\r",
+									"        pm.expect(country.states.edges[0]).to.have.property(\"cursor\");\r",
+									"        pm.expect(country.states.edges[0]).to.have.property(\"node\");\r",
+									"        pm.expect(country.states.edges[0].node).to.have.property(\"id\");\r",
+									"        pm.expect(country.states.edges[0].node).to.have.property(\"name\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Validar que cidades pertencem ao estado do país selecionado\r",
+									"pm.test(\"Validar que cidades pertencem ao estado do país selecionado\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var country = jsonData.data.country;\r",
+									"\r",
+									"    // Verifica se o país foi retornado corretamente\r",
+									"    pm.expect(country).to.have.property(\"name\");\r",
+									"    console.log(\"País selecionado:\", country.name);\r",
+									"\r",
+									"    // Verifica se o país possui estados\r",
+									"    pm.expect(country).to.have.property(\"states\");\r",
+									"    pm.expect(country.states.edges).to.be.an(\"array\");\r",
+									"\r",
+									"    if (country.states.edges.length > 0) {\r",
+									"        country.states.edges.forEach(function (state) {\r",
+									"            pm.expect(state.node).to.have.property(\"name\");\r",
+									"            console.log(\"Estado encontrado:\", state.node.name);\r",
+									"\r",
+									"            // Verifica se o estado possui cidades\r",
+									"            if (state.node.cities && state.node.cities.edges.length > 0) {\r",
+									"                state.node.cities.edges.forEach(function (city) {\r",
+									"                    pm.expect(city.node).to.have.property(\"name\");\r",
+									"                    console.log(\"Cidade encontrada:\", city.node.name);\r",
+									"                });\r",
+									"            } else {\r",
+									"                console.log(\"Nenhuma cidade encontrada para o estado:\", state.node.name);\r",
+									"            }\r",
+									"        });\r",
+									"    } else {\r",
+									"        console.log(\"Nenhum estado encontrado para o país:\", country.name);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Capturar o ID de um país\r",
+									"pm.test(\"Capturar o id\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var country = jsonData.data.country;\r",
+									"    pm.globals.set(\"countryId\", country.id);\r",
+									"    console.log(pm.globals.get(\"countryId\"))\r",
+									"});\r",
+									"\r",
+									"// Capturar dados do país (exemplo: \"name\", \"iso2\")\r",
+									"pm.test(\"Capturar dados do país\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var country = jsonData.data.country;\r",
+									"\r",
+									"    pm.expect(country).to.have.property(\"name\");\r",
+									"    pm.expect(country).to.have.property(\"iso2\");\r",
+									"    pm.expect(country).to.have.property(\"capital\");\r",
+									"    pm.expect(country).to.have.property(\"currency\");\r",
+									"    pm.expect(country).to.have.property(\"currency_symbol\");\r",
+									"    pm.expect(country).to.have.property(\"emoji\");\r",
+									"});\r",
+									"\r",
+									"// Verificar se a capital pertence ao país correto\r",
+									"pm.test(\"Verificar se a capital pertence ao país correto\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var country = jsonData.data.country;\r",
+									"\r",
+									"    pm.expect(country.capital).to.exist;\r",
+									"    console.log(\"A capital do país é:\", country.capital);\r",
+									"});\r",
+									"\r",
+									"// Garantir que a moeda e o símbolo correspondem ao país\r",
+									"pm.test(\"Garantir que a moeda e o símbolo correspondem ao país\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    var country = jsonData.data.country;\r",
+									"\r",
+									"    pm.expect(country.currency).to.exist;\r",
+									"    pm.expect(country.currency_symbol).to.exist;\r",
+									"\r",
+									"    console.log(\"Moeda do país:\", country.currency);\r",
+									"    console.log(\"Símbolo da moeda:\", country.currency_symbol);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.globals.unset(\"schema\");\r",
+									"\r",
+									"pm.globals.set(\"schema\", {\r",
+									"    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\r",
+									"    \"type\": \"object\",\r",
+									"    \"properties\": {\r",
+									"        \"data\": {\r",
+									"            \"type\": \"object\",\r",
+									"            \"properties\": {\r",
+									"                \"country\": {\r",
+									"                    \"type\": \"object\",\r",
+									"                    \"properties\": {\r",
+									"                        \"id\": { \"type\": \"integer\" },\r",
+									"                        \"name\": { \"type\": \"string\" },\r",
+									"                        \"iso2\": { \"type\": \"string\" },\r",
+									"                        \"capital\": { \"type\": \"string\" },\r",
+									"                        \"tld\": { \"type\": \"string\" },\r",
+									"                        \"states\": {\r",
+									"                            \"type\": \"object\",\r",
+									"                            \"properties\": {\r",
+									"                                \"totalCount\": { \"type\": \"integer\" },\r",
+									"                                \"edges\": {\r",
+									"                                    \"type\": \"array\",\r",
+									"                                    \"items\": {\r",
+									"                                        \"type\": \"object\",\r",
+									"                                        \"properties\": {\r",
+									"                                            \"cursor\": { \"type\": \"string\" },\r",
+									"                                            \"node\": {\r",
+									"                                                \"type\": \"object\",\r",
+									"                                                \"properties\": {\r",
+									"                                                    \"id\": { \"type\": \"integer\" },\r",
+									"                                                    \"name\": { \"type\": \"string\" }\r",
+									"                                                },\r",
+									"                                                \"required\": [\"id\", \"name\"]\r",
+									"                                            }\r",
+									"                                        },\r",
+									"                                        \"required\": [\"cursor\", \"node\"]\r",
+									"                                    }\r",
+									"                                }\r",
+									"                            },\r",
+									"                            \"required\": [\"totalCount\", \"edges\"]\r",
+									"                        },\r",
+									"                        \"currency\": { \"type\": \"string\" },\r",
+									"                        \"currency_symbol\": { \"type\": \"string\" },\r",
+									"                        \"emoji\": { \"type\": \"string\" }\r",
+									"                    },\r",
+									"                    \"required\": [\r",
+									"                        \"id\", \"name\", \"iso2\", \"capital\", \"tld\",\r",
+									"                        \"states\", \"currency\", \"currency_symbol\", \"emoji\"\r",
+									"                    ]\r",
+									"                }\r",
+									"            },\r",
+									"            \"required\": [\"country\"]\r",
+									"        }\r",
+									"    },\r",
+									"    \"required\": [\"data\"]\r",
+									"}\r",
+									");\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query Country($id: Int) {  \r\n  country(id: $id) {\r\n    # Country Fields\r\n    id\r\n    name\r\n    iso2\r\n    capital\r\n    tld\r\n    states(page: { first: 2 }) {\r\n      totalCount\r\n      edges {\r\n        cursor\r\n        node {\r\n          id\r\n          name\r\n          cities(page: { first: 2 }) {  \r\n            totalCount\r\n            edges {\r\n              cursor\r\n              node {\r\n                id\r\n                name\r\n              }\r\n            }\r\n          }\r\n        }\r\n      }\r\n    }\r\n    currency\r\n    currency_symbol\r\n    emoji\r\n  }\r\n}\r\n",
+								"variables": "{\r\n  \"id\": 236\r\n\r\n}\r\n\r\n\r\n"
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}",
+							"host": [
+								"{{baseurl}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "States",
+			"item": [
+				{
+					"name": "State (Brayan)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}",
+							"host": [
+								"{{baseurl}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "States (Willams)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"  pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"let schema = {\r",
+									"  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+									"  \"title\": \"Generated schema for Root\",\r",
+									"  \"type\": \"object\",\r",
+									"  \"properties\": {\r",
+									"    \"data\": {\r",
+									"      \"type\": \"object\",\r",
+									"      \"properties\": {\r",
+									"        \"states\": {\r",
+									"          \"type\": \"object\",\r",
+									"          \"properties\": {\r",
+									"            \"totalCount\": {\r",
+									"              \"type\": \"number\"\r",
+									"            },\r",
+									"            \"edges\": {\r",
+									"              \"type\": \"array\",\r",
+									"              \"items\": {\r",
+									"                \"type\": \"object\",\r",
+									"                \"properties\": {\r",
+									"                  \"cursor\": {\r",
+									"                    \"type\": \"string\"\r",
+									"                  },\r",
+									"                  \"node\": {\r",
+									"                    \"type\": \"object\",\r",
+									"                    \"properties\": {\r",
+									"                      \"name\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                      },\r",
+									"                      \"state_code\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                      },\r",
+									"                      \"country_code\": {\r",
+									"                        \"type\": \"string\"\r",
+									"                      },\r",
+									"                      \"latitude\": {\r",
+									"                        \"type\": \"number\"\r",
+									"                      },\r",
+									"                      \"longitude\": {\r",
+									"                        \"type\": \"number\"\r",
+									"                      }\r",
+									"                    },\r",
+									"                    \"required\": [\r",
+									"                      \"name\",\r",
+									"                      \"state_code\",\r",
+									"                      \"country_code\",\r",
+									"                      \"latitude\",\r",
+									"                      \"longitude\"\r",
+									"                    ]\r",
+									"                  }\r",
+									"                },\r",
+									"                \"required\": [\r",
+									"                  \"cursor\",\r",
+									"                  \"node\"\r",
+									"                ]\r",
+									"              }\r",
+									"            },\r",
+									"            \"pageInfo\": {\r",
+									"              \"type\": \"object\",\r",
+									"              \"properties\": {\r",
+									"                \"hasNextPage\": {\r",
+									"                  \"type\": \"boolean\"\r",
+									"                },\r",
+									"                \"hasPreviousPage\": {\r",
+									"                  \"type\": \"boolean\"\r",
+									"                },\r",
+									"                \"endCursor\": {\r",
+									"                  \"type\": \"string\"\r",
+									"                },\r",
+									"                \"startCursor\": {\r",
+									"                  \"type\": \"string\"\r",
+									"                }\r",
+									"              },\r",
+									"              \"required\": [\r",
+									"                \"hasNextPage\",\r",
+									"                \"hasPreviousPage\",\r",
+									"                \"endCursor\",\r",
+									"                \"startCursor\"\r",
+									"              ]\r",
+									"            }\r",
+									"          },\r",
+									"          \"required\": [\r",
+									"            \"totalCount\",\r",
+									"            \"edges\",\r",
+									"            \"pageInfo\"\r",
+									"          ]\r",
+									"        }\r",
+									"      },\r",
+									"      \"required\": [\r",
+									"        \"states\"\r",
+									"      ]\r",
+									"    }\r",
+									"  },\r",
+									"  \"required\": [\r",
+									"    \"data\"\r",
+									"  ]\r",
+									"}\r",
+									"\r",
+									"pm.test(\"O esquema JSON é válido\", () => {\r",
+									"    pm.response.to.have.jsonSchema(schema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"O campo 'first' é válido\", () => {\r",
+									"    let response = pm.response.json();\r",
+									"    pm.expect(response.data.states.edges.length)\r",
+									"    .to.eql(Number(pm.globals.get('first_states')))\r",
+									"})\r",
+									"\r",
+									"pm.test(\"O campo 'hasPreviousPage' é válido\", () => {\r",
+									"    let response = pm.response.json();\r",
+									"    pm.expect(response.data.states.pageInfo.hasPreviousPage).to.be.false;\r",
+									"})\r",
+									"\r",
+									"pm.test(\"O campo 'ciso2' é válido\", () => {\r",
+									"    let response = pm.response.json()\r",
+									"    pm.expect(response.data.states.edges[0].node.country_code)\r",
+									"    .to.eql(pm.globals.get('ciso2_states'))\r",
+									"})\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"ciso2_states\", \"BR\");\r",
+									"\r",
+									"pm.globals.set(\"first_states\", \"27\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query ($ciso2: String!, $first: Int)\r\n{\r\n  states(\r\n    filter: { ciso2: $ciso2 }\r\n    page: { first: $first }\r\n  ) {\r\n    totalCount\r\n    edges {\r\n      cursor\r\n      node {\r\n        name\r\n        state_code\r\n        country_code\r\n        latitude\r\n        longitude\r\n      }\r\n    }\r\n    pageInfo {\r\n      hasNextPage\r\n      hasPreviousPage\r\n      endCursor\r\n      startCursor\r\n    }\r\n  }\r\n}",
+								"variables": "{\r\n    \"ciso2\": \"{{ciso2_states}}\",\r\n    \"first\": {{first_states}}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}",
+							"host": [
+								"{{baseurl}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
