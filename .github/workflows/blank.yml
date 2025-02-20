@@ -21,7 +21,7 @@ jobs:
           npm install -g newman-reporter-htmlextra
           
       - name: Run Test
-        run: newman run Geographql.postman_collection.json -e geographql_test.postman_environment.json -r cli,htmlextra
+        run:  newman run Geographql.postman_collection.json -e geographql_test.postman_environment.json -r cli,htmlextra
         
       - name: Report
         uses: actions/upload-artifact@v3.1.2
