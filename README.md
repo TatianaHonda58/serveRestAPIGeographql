@@ -53,7 +53,19 @@ newman run Geographql.postman_collection.json -e geographql_test.postman_environ
 Caso tenha rodado os testes com o report htmlextra, um arquivo HTML foi gerado com o resultado dos testes. Para visualizar, basta abrir a pasta newman que foi criada no diretório onde os arquivos de collection e environment se encontram.
 
 ## 🔥 Contribuição
-Sinta-se à vontade para contribuir com sugestões e recomendações de aprimoramentos para os testes da API.
+Sinta-se à vontade para contribuir com sugestões e recomendações de aprimoramentos para os testes da API.                                                
 
+## 👥 Integrantes do Projeto
 
+| Nome             | GitHub                          | Função         |
+|-----------------|--------------------------------|---------------|
+| 🚀 Brayan | [LinkedIn](https://www.linkedin.com/in/brayanmoncks/) | QA/Testes     |
+| 🛠 Patricia | [LinkedIn](https://www.linkedin.com/in/patricia-rosa-silva/) | QA/Testes   |
+| ⏰ Tatiana | [LinkedIn](https://www.linkedin.com/in/tatiana-honda/) | QA/Testes  |
+| 🔍 Willams | [LinkedIn](https://www.linkedin.com/in/willamsbarbosa/) | QA/Testes  |
+
+## 🎯 Informações adicionais
+- 🦋 Autor: Tatiana Mitiko Honda
+- 📅 Última atualização: 20-02-2025
+- 👩‍💻 Tech Lead: Priscila Caimi
 
