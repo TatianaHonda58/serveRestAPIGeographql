@@ -2,7 +2,7 @@
 Teste de API Rest do manual a CI/CD
 
 ## 🌱 O que é
-Este repositório foi criado para demonstrar o processo de automação de testes numa API REST utilizando Postman, Newman e upload de massa de testes por arquivo .CSV
+Este repositório foi criado para demonstrar o processo de automação de testes numa API REST utilizando Postman e Newman.
                                                                                                       
 ## 🌍 Sobre a API Geographql   
 A API Geographql oferece acesso a dados geográficos, permitindo consultas e manipulações de informações sobre países, estados e cidades.                                                    
@@ -36,15 +36,15 @@ npm install -g newman-reporter-html
 ## 🤖 Como Executar os Testes
 ### 📫 Postman
 - Importe os arquivos Geographql.postman_collection e geographql_test.postman_environment para o Postman.
--  Execute os testes manualmente ou configure-os para execução automatizada.
+- Execute os testes manualmente ou configure-os para execução automatizada.
 
 ### ☎️ Newman
--  Abra o terminal na pasta onde estão os arquivos da coleção e do ambiente.
--  Execute o seguinte comando para rodar os testes:                                                          
+- Abra o terminal na pasta onde estão os arquivos da coleção e do ambiente.
+- Execute o seguinte comando para rodar os testes:                                                          
 ```                     
 newman run Geographql.postman_collection.json -e geographql_test.postman_environment.json -r cli
 ```
--  Para gerar um relatório HTML, execute o seguinte comando:
+- Para gerar um relatório HTML, execute o seguinte comando:
 ```
 newman run Geographql.postman_collection.json -e geographql_test.postman_environment.json -r cli,htmlextra
 ```
