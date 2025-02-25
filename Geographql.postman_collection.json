@@ -138,7 +138,17 @@
 									"\r",
 									"    console.log(\"Moeda do país:\", country.currency);\r",
 									"    console.log(\"Símbolo da moeda:\", country.currency_symbol);\r",
-									"});                                                             "
+									"});                                                             \r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -231,9 +241,16 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseurl}}",
+							"raw": "https://api.geographql.rudio.dev/graphql",
+							"protocol": "https",
 							"host": [
-								"{{baseurl}}"
+								"api",
+								"geographql",
+								"rudio",
+								"dev"
+							],
+							"path": [
+								"graphql"
 							]
 						}
 					},
