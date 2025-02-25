@@ -23,8 +23,8 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "query {\r\n  city(id: 1) {\r\n    id\r\n    name\r\n    \r\n  }\r\n}\r\n",
-								"variables": "{\r\n  \"id\": 1\r\n}\r\n"
+								"query": "{\r\n  city(id: 127759) {\r\n    # City Fields\r\n    id\r\n    name\r\n    state_id\r\n    country_id\r\n    country_code\r\n    latitude\r\n    longitude\r\n  }\r\n}",
+								"variables": "{\r\n  \"id\":127759\r\n\r\n}"
 							}
 						},
 						"url": {
@@ -48,6 +48,10 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"// Declarar o JSON apenas uma vez\r",
+									"var jsonData = pm.response.json();\r",
+									"var country = jsonData.data.country;\r",
+									"\r",
 									"// Testar se o status code da resposta é 200\r",
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
@@ -55,9 +59,6 @@
 									"\r",
 									"// Validar o contrato do schema \r",
 									"pm.test(\"Schema é válido\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    var country = jsonData.data.country;\r",
-									"\r",
 									"    pm.expect(country).to.have.property(\"id\");\r",
 									"    pm.expect(country).to.have.property(\"name\");\r",
 									"    pm.expect(country).to.have.property(\"iso2\");\r",
@@ -83,14 +84,9 @@
 									"\r",
 									"// Validar que cidades pertencem ao estado do país selecionado\r",
 									"pm.test(\"Validar que cidades pertencem ao estado do país selecionado\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    var country = jsonData.data.country;\r",
-									"\r",
-									"    // Verifica se o país foi retornado corretamente\r",
 									"    pm.expect(country).to.have.property(\"name\");\r",
 									"    console.log(\"País selecionado:\", country.name);\r",
 									"\r",
-									"    // Verifica se o país possui estados\r",
 									"    pm.expect(country).to.have.property(\"states\");\r",
 									"    pm.expect(country.states.edges).to.be.an(\"array\");\r",
 									"\r",
@@ -99,7 +95,6 @@
 									"            pm.expect(state.node).to.have.property(\"name\");\r",
 									"            console.log(\"Estado encontrado:\", state.node.name);\r",
 									"\r",
-									"            // Verifica se o estado possui cidades\r",
 									"            if (state.node.cities && state.node.cities.edges.length > 0) {\r",
 									"                state.node.cities.edges.forEach(function (city) {\r",
 									"                    pm.expect(city.node).to.have.property(\"name\");\r",
@@ -116,17 +111,12 @@
 									"\r",
 									"// Capturar o ID de um país\r",
 									"pm.test(\"Capturar o id\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    var country = jsonData.data.country;\r",
 									"    pm.globals.set(\"countryId\", country.id);\r",
-									"    console.log(pm.globals.get(\"countryId\"))\r",
+									"    console.log(pm.globals.get(\"countryId\"));\r",
 									"});\r",
 									"\r",
 									"// Capturar dados do país (exemplo: \"name\", \"iso2\")\r",
 									"pm.test(\"Capturar dados do país\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    var country = jsonData.data.country;\r",
-									"\r",
 									"    pm.expect(country).to.have.property(\"name\");\r",
 									"    pm.expect(country).to.have.property(\"iso2\");\r",
 									"    pm.expect(country).to.have.property(\"capital\");\r",
@@ -137,25 +127,18 @@
 									"\r",
 									"// Verificar se a capital pertence ao país correto\r",
 									"pm.test(\"Verificar se a capital pertence ao país correto\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    var country = jsonData.data.country;\r",
-									"\r",
 									"    pm.expect(country.capital).to.exist;\r",
 									"    console.log(\"A capital do país é:\", country.capital);\r",
 									"});\r",
 									"\r",
 									"// Garantir que a moeda e o símbolo correspondem ao país\r",
 									"pm.test(\"Garantir que a moeda e o símbolo correspondem ao país\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    var country = jsonData.data.country;\r",
-									"\r",
 									"    pm.expect(country.currency).to.exist;\r",
 									"    pm.expect(country.currency_symbol).to.exist;\r",
 									"\r",
 									"    console.log(\"Moeda do país:\", country.currency);\r",
 									"    console.log(\"Símbolo da moeda:\", country.currency_symbol);\r",
-									"});\r",
-									""
+									"});                                                             "
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -223,6 +206,7 @@
 									"    \"required\": [\"data\"]\r",
 									"}\r",
 									");\r",
+									"\r",
 									""
 								],
 								"type": "text/javascript",
@@ -260,27 +244,6 @@
 		{
 			"name": "States",
 			"item": [
-				{
-					"name": "State (Brayan)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "graphql",
-							"graphql": {
-								"query": "",
-								"variables": ""
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}",
-							"host": [
-								"{{baseurl}}"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "States (Willams)",
 					"event": [
@@ -327,10 +290,10 @@
 									"                        \"type\": \"string\"\r",
 									"                      },\r",
 									"                      \"latitude\": {\r",
-									"                        \"type\": \"number\"\r",
+									"                        \"type\": [\"number\", \"null\"]\r",
 									"                      },\r",
 									"                      \"longitude\": {\r",
-									"                        \"type\": \"number\"\r",
+									"                        \"type\": [\"number\", \"null\"]\r",
 									"                      }\r",
 									"                    },\r",
 									"                    \"required\": [\r",
@@ -438,6 +401,164 @@
 							"graphql": {
 								"query": "query ($ciso2: String!, $first: Int)\r\n{\r\n  states(\r\n    filter: { ciso2: $ciso2 }\r\n    page: { first: $first }\r\n  ) {\r\n    totalCount\r\n    edges {\r\n      cursor\r\n      node {\r\n        name\r\n        state_code\r\n        country_code\r\n        latitude\r\n        longitude\r\n      }\r\n    }\r\n    pageInfo {\r\n      hasNextPage\r\n      hasPreviousPage\r\n      endCursor\r\n      startCursor\r\n    }\r\n  }\r\n}",
 								"variables": "{\r\n    \"ciso2\": \"{{ciso2_states}}\",\r\n    \"first\": {{first_states}}\r\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}",
+							"host": [
+								"{{baseurl}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "State",
+			"item": [
+				{
+					"name": "State (Brayan)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code é 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Schema é valido', function () {\r",
+									"    pm.expect(tv4.validate(pm.response.json(), pm.globals.get(\"schemaState\"))).to.be.true;\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test('Capturar o id', function () {\r",
+									"   pm.globals.set(\"stateID\", pm.response.json().data.state.id)\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test('Capturar o Objeto', function () {\r",
+									"   pm.globals.set(\"stateObj\", pm.response.json().data.state)\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test('Validar o id capturado ', function () {\r",
+									"   pm.expect(pm.response.json().data.state.id).to.be.eql(pm.globals.get(\"stateID\"))\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.test('Validar o objeto capturado', function () {\r",
+									"    console.log(pm.response.json().data.state)\r",
+									"    console.log(\" \")\r",
+									"    console.log(pm.globals.get(\"stateObj\"))\r",
+									"   pm.expect(pm.response.json().data.state).to.be.eql(pm.globals.get(\"stateObj\"))\r",
+									"   \r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"schemaState\",{\r",
+									"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\r",
+									"  \"type\": \"object\",\r",
+									"  \"properties\": {\r",
+									"    \"data\": {\r",
+									"      \"type\": \"object\",\r",
+									"      \"properties\": {\r",
+									"        \"state\": {\r",
+									"          \"type\": \"object\",\r",
+									"          \"properties\": {\r",
+									"            \"id\": {\r",
+									"              \"type\": \"integer\"\r",
+									"            },\r",
+									"            \"name\": {\r",
+									"              \"type\": \"string\"\r",
+									"            },\r",
+									"            \"country_id\": {\r",
+									"              \"type\": \"integer\"\r",
+									"            },\r",
+									"            \"cities\": {\r",
+									"              \"type\": \"object\",\r",
+									"              \"properties\": {\r",
+									"                \"totalCount\": {\r",
+									"                  \"type\": \"integer\"\r",
+									"                },\r",
+									"                \"edges\": {\r",
+									"                  \"type\": \"array\",\r",
+									"                  \"items\": [\r",
+									"                    {\r",
+									"                      \"type\": \"object\",\r",
+									"                      \"properties\": {\r",
+									"                        \"cursor\": {\r",
+									"                          \"type\": \"string\"\r",
+									"                        },\r",
+									"                        \"node\": {\r",
+									"                          \"type\": \"object\",\r",
+									"                          \"properties\": {\r",
+									"                            \"id\": {\r",
+									"                              \"type\": \"integer\"\r",
+									"                            },\r",
+									"                            \"name\": {\r",
+									"                              \"type\": \"string\"\r",
+									"                            }\r",
+									"                          },\r",
+									"                          \"required\": [\r",
+									"                            \"id\",\r",
+									"                            \"name\"\r",
+									"                          ]\r",
+									"                        }\r",
+									"                      },\r",
+									"                      \"required\": [\r",
+									"                        \"cursor\",\r",
+									"                        \"node\"\r",
+									"                      ]\r",
+									"                    }\r",
+									"                  ]\r",
+									"                }\r",
+									"              },\r",
+									"              \"required\": [\r",
+									"                \"totalCount\",\r",
+									"                \"edges\"\r",
+									"              ]\r",
+									"            }\r",
+									"          },\r",
+									"          \"required\": [\r",
+									"            \"id\",\r",
+									"            \"name\",\r",
+									"            \"country_id\",\r",
+									"            \"cities\"\r",
+									"          ]\r",
+									"        }\r",
+									"      },\r",
+									"      \"required\": [\r",
+									"        \"state\"\r",
+									"      ]\r",
+									"    }\r",
+									"  },\r",
+									"  \"required\": [\r",
+									"    \"data\"\r",
+									"  ]\r",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "{\r\n  state(locationCode: { country_code: \"BR\", state_code: \"RS\" }) {\r\n    # State Fields\r\n    id\r\n    name\r\n    country_id\r\n    cities(page: { first: 497 }) {\r\n      totalCount\r\n      edges {\r\n        cursor\r\n        node {\r\n          id\r\n          name\r\n        }\r\n      }\r\n    }\r\n    # ...\r\n  }\r\n}",
+								"variables": ""
 							}
 						},
 						"url": {
