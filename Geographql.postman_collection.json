@@ -11,6 +11,20 @@
 			"item": [
 				{
 					"name": "City (Patrícia)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -28,9 +42,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseurl}}",
+							"raw": "{{baseURL}}",
 							"host": [
-								"{{baseurl}}"
+								"{{baseURL}}"
 							]
 						}
 					},
@@ -50,105 +64,102 @@
 								"exec": [
 									"// Declarar o JSON apenas uma vez\r",
 									"var jsonData = pm.response.json();\r",
-									"var country = jsonData.data.country;\r",
+									"console.log(\"Resposta JSON:\", jsonData); // Adicionado para imprimir a resposta completa\r",
 									"\r",
-									"// Testar se o status code da resposta é 200\r",
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
+									"if (jsonData && jsonData.data && jsonData.data.country) {\r",
+									"    var country = jsonData.data.country;\r",
+									"    console.log(\"Dados do país:\", country); // Adicionado para imprimir os dados do país\r",
 									"\r",
-									"// Validar o contrato do schema \r",
-									"pm.test(\"Schema é válido\", function () {\r",
-									"    pm.expect(country).to.have.property(\"id\");\r",
-									"    pm.expect(country).to.have.property(\"name\");\r",
-									"    pm.expect(country).to.have.property(\"iso2\");\r",
-									"    pm.expect(country).to.have.property(\"capital\");\r",
-									"    pm.expect(country).to.have.property(\"tld\");\r",
-									"    pm.expect(country).to.have.property(\"currency\");\r",
-									"    pm.expect(country).to.have.property(\"currency_symbol\");\r",
-									"    pm.expect(country).to.have.property(\"emoji\");\r",
-									"    pm.expect(country).to.have.property(\"states\");\r",
+									"    // Testar se o status code da resposta é 200\r",
+									"    pm.test(\"Status code is 200\", function () {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    });\r",
 									"\r",
-									"    // Validar a estrutura de 'states'\r",
-									"    pm.expect(country.states).to.have.property(\"totalCount\");\r",
-									"    pm.expect(country.states).to.have.property(\"edges\");\r",
-									"    pm.expect(country.states.edges).to.be.an(\"array\");\r",
+									"    // Validar o contrato do schema \r",
+									"    pm.test(\"Schema é válido\", function () {\r",
+									"        pm.expect(country).to.have.property(\"id\");\r",
+									"        pm.expect(country).to.have.property(\"name\");\r",
+									"        pm.expect(country).to.have.property(\"iso2\");\r",
+									"        pm.expect(country).to.have.property(\"capital\");\r",
+									"        pm.expect(country).to.have.property(\"tld\");\r",
+									"        pm.expect(country).to.have.property(\"currency\");\r",
+									"        pm.expect(country).to.have.property(\"currency_symbol\");\r",
+									"        pm.expect(country).to.have.property(\"emoji\");\r",
+									"        pm.expect(country).to.have.property(\"states\");\r",
 									"\r",
-									"    if (country.states.edges.length > 0) {\r",
-									"        pm.expect(country.states.edges[0]).to.have.property(\"cursor\");\r",
-									"        pm.expect(country.states.edges[0]).to.have.property(\"node\");\r",
-									"        pm.expect(country.states.edges[0].node).to.have.property(\"id\");\r",
-									"        pm.expect(country.states.edges[0].node).to.have.property(\"name\");\r",
-									"    }\r",
-									"});\r",
+									"        // Validar a estrutura de 'states'\r",
+									"        pm.expect(country.states).to.have.property(\"totalCount\");\r",
+									"        pm.expect(country.states).to.have.property(\"edges\");\r",
+									"        pm.expect(country.states.edges).to.be.an(\"array\");\r",
 									"\r",
-									"// Validar que cidades pertencem ao estado do país selecionado\r",
-									"pm.test(\"Validar que cidades pertencem ao estado do país selecionado\", function () {\r",
-									"    pm.expect(country).to.have.property(\"name\");\r",
-									"    console.log(\"País selecionado:\", country.name);\r",
+									"        if (country.states.edges.length > 0) {\r",
+									"            pm.expect(country.states.edges[0]).to.have.property(\"cursor\");\r",
+									"            pm.expect(country.states.edges[0]).to.have.property(\"node\");\r",
+									"            pm.expect(country.states.edges[0].node).to.have.property(\"id\");\r",
+									"            pm.expect(country.states.edges[0].node).to.have.property(\"name\");\r",
+									"        }\r",
+									"    });\r",
 									"\r",
-									"    pm.expect(country).to.have.property(\"states\");\r",
-									"    pm.expect(country.states.edges).to.be.an(\"array\");\r",
+									"    // Validar que cidades pertencem ao estado do país selecionado\r",
+									"    pm.test(\"Validar que cidades pertencem ao estado do país selecionado\", function () {\r",
+									"        pm.expect(country).to.have.property(\"name\");\r",
+									"        console.log(\"País selecionado:\", country.name);\r",
 									"\r",
-									"    if (country.states.edges.length > 0) {\r",
-									"        country.states.edges.forEach(function (state) {\r",
-									"            pm.expect(state.node).to.have.property(\"name\");\r",
-									"            console.log(\"Estado encontrado:\", state.node.name);\r",
+									"        pm.expect(country).to.have.property(\"states\");\r",
+									"        pm.expect(country.states.edges).to.be.an(\"array\");\r",
 									"\r",
-									"            if (state.node.cities && state.node.cities.edges.length > 0) {\r",
-									"                state.node.cities.edges.forEach(function (city) {\r",
-									"                    pm.expect(city.node).to.have.property(\"name\");\r",
-									"                    console.log(\"Cidade encontrada:\", city.node.name);\r",
-									"                });\r",
-									"            } else {\r",
-									"                console.log(\"Nenhuma cidade encontrada para o estado:\", state.node.name);\r",
-									"            }\r",
-									"        });\r",
-									"    } else {\r",
-									"        console.log(\"Nenhum estado encontrado para o país:\", country.name);\r",
-									"    }\r",
-									"});\r",
+									"        if (country.states.edges.length > 0) {\r",
+									"            country.states.edges.forEach(function (state) {\r",
+									"                pm.expect(state.node).to.have.property(\"name\");\r",
+									"                console.log(\"Estado encontrado:\", state.node.name);\r",
 									"\r",
-									"// Capturar o ID de um país\r",
-									"pm.test(\"Capturar o id\", function () {\r",
-									"    pm.globals.set(\"countryId\", country.id);\r",
-									"    console.log(pm.globals.get(\"countryId\"));\r",
-									"});\r",
+									"                if (state.node.cities && state.node.cities.edges.length > 0) {\r",
+									"                    state.node.cities.edges.forEach(function (city) {\r",
+									"                        pm.expect(city.node).to.have.property(\"name\");\r",
+									"                        console.log(\"Cidade encontrada:\", city.node.name);\r",
+									"                    });\r",
+									"                } else {\r",
+									"                    console.log(\"Nenhuma cidade encontrada para o estado:\", state.node.name);\r",
+									"                }\r",
+									"            });\r",
+									"        } else {\r",
+									"            console.log(\"Nenhum estado encontrado para o país:\", country.name);\r",
+									"        }\r",
+									"    });\r",
 									"\r",
-									"// Capturar dados do país (exemplo: \"name\", \"iso2\")\r",
-									"pm.test(\"Capturar dados do país\", function () {\r",
-									"    pm.expect(country).to.have.property(\"name\");\r",
-									"    pm.expect(country).to.have.property(\"iso2\");\r",
-									"    pm.expect(country).to.have.property(\"capital\");\r",
-									"    pm.expect(country).to.have.property(\"currency\");\r",
-									"    pm.expect(country).to.have.property(\"currency_symbol\");\r",
-									"    pm.expect(country).to.have.property(\"emoji\");\r",
-									"});\r",
+									"    // Capturar o ID de um país\r",
+									"    pm.test(\"Capturar o id\", function () {\r",
+									"        pm.globals.set(\"countryId\", country.id);\r",
+									"        console.log(pm.globals.get(\"countryId\"));\r",
+									"    });\r",
 									"\r",
-									"// Verificar se a capital pertence ao país correto\r",
-									"pm.test(\"Verificar se a capital pertence ao país correto\", function () {\r",
-									"    pm.expect(country.capital).to.exist;\r",
-									"    console.log(\"A capital do país é:\", country.capital);\r",
-									"});\r",
+									"    // Capturar dados do país (exemplo: \"name\", \"iso2\")\r",
+									"    pm.test(\"Capturar dados do país\", function () {\r",
+									"        pm.expect(country).to.have.property(\"name\");\r",
+									"        pm.expect(country).to.have.property(\"iso2\");\r",
+									"        pm.expect(country).to.have.property(\"capital\");\r",
+									"        pm.expect(country).to.have.property(\"currency\");\r",
+									"        pm.expect(country).to.have.property(\"currency_symbol\");\r",
+									"        pm.expect(country).to.have.property(\"emoji\");\r",
+									"    });\r",
 									"\r",
-									"// Garantir que a moeda e o símbolo correspondem ao país\r",
-									"pm.test(\"Garantir que a moeda e o símbolo correspondem ao país\", function () {\r",
-									"    pm.expect(country.currency).to.exist;\r",
-									"    pm.expect(country.currency_symbol).to.exist;\r",
+									"    // Verificar se a capital pertence ao país correto\r",
+									"    pm.test(\"Verificar se a capital pertence ao país correto\", function () {\r",
+									"        pm.expect(country.capital).to.exist;\r",
+									"        console.log(\"A capital do país é:\", country.capital);\r",
+									"    });\r",
 									"\r",
-									"    console.log(\"Moeda do país:\", country.currency);\r",
-									"    console.log(\"Símbolo da moeda:\", country.currency_symbol);\r",
-									"});                                                             \r",
+									"    // Garantir que a moeda e o símbolo correspondem ao país\r",
+									"    pm.test(\"Garantir que a moeda e o símbolo correspondem ao país\", function () {\r",
+									"        pm.expect(country.currency).to.exist;\r",
+									"        pm.expect(country.currency_symbol).to.exist;\r",
 									"\r",
-									"\r",
-									"\r",
-									"\r",
-									"\r",
-									"\r",
-									"\r",
-									"\r",
-									"\r",
-									""
+									"        console.log(\"Moeda do país:\", country.currency);\r",
+									"        console.log(\"Símbolo da moeda:\", country.currency_symbol);\r",
+									"    });\r",
+									"} else {\r",
+									"    console.error(\"Dados do país não encontrados na resposta JSON.\");\r",
+									"}"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -241,16 +252,9 @@
 							}
 						},
 						"url": {
-							"raw": "https://api.geographql.rudio.dev/graphql",
-							"protocol": "https",
+							"raw": "{{baseURL}}",
 							"host": [
-								"api",
-								"geographql",
-								"rudio",
-								"dev"
-							],
-							"path": [
-								"graphql"
+								"{{baseURL}}"
 							]
 						}
 					},
@@ -421,9 +425,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseurl}}",
+							"raw": "{{baseURL}}",
 							"host": [
-								"{{baseurl}}"
+								"{{baseURL}}"
 							]
 						}
 					},
@@ -579,9 +583,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseurl}}",
+							"raw": "{{baseURL}}",
 							"host": [
-								"{{baseurl}}"
+								"{{baseURL}}"
 							]
 						}
 					},
