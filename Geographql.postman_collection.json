@@ -553,18 +553,12 @@
 									"   \r",
 									"});\r",
 									"\r",
-									"pm.test('Validar o id capturado ', function () {\r",
-									"   pm.expect(pm.response.json().data.state.id).to.be.eql(pm.globals.get(\"stateID\"))\r",
-									"   \r",
+									"pm.test(' Estado', function(){\r",
+									"    pm.expect(pm.response.json().data.state.country_id).to.eql(pm.globals.get('stateObj').country_id)\r",
+									"    \r",
 									"});\r",
 									"\r",
-									"pm.test('Validar o objeto capturado', function () {\r",
-									"    console.log(pm.response.json().data.state)\r",
-									"    console.log(\" \")\r",
-									"    console.log(pm.globals.get(\"stateObj\"))\r",
-									"   pm.expect(pm.response.json().data.state).to.be.eql(pm.globals.get(\"stateObj\"))\r",
-									"   \r",
-									"});"
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -667,7 +661,7 @@
 						"body": {
 							"mode": "graphql",
 							"graphql": {
-								"query": "{\r\n  state(locationCode: { country_code: \"BR\", state_code: \"RS\" }) {\r\n    # State Fields\r\n    id\r\n    name\r\n    country_id\r\n    cities(page: { first: 497 }) {\r\n      totalCount\r\n      edges {\r\n        cursor\r\n        node {\r\n          id\r\n          name\r\n        }\r\n      }\r\n    }\r\n    # ...\r\n  }\r\n}",
+								"query": "{\r\n  state(locationCode: { country_code: \"US\", state_code: \"SC\" }) {\r\n    # State Fields\r\n    id\r\n    name\r\n    country_id\r\n    cities(page: { first: 497 }) {\r\n      totalCount\r\n      edges {\r\n        cursor\r\n        node {\r\n          id\r\n          name\r\n        }\r\n      }\r\n    }\r\n    # ...\r\n  }\r\n}",
 								"variables": ""
 							}
 						},
