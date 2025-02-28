@@ -1,8 +1,8 @@
 # 🚀 Testes em API GeoGraphQL
-Teste de API Rest do manual a CI/CD
+Teste de API Graphql do manual a CI/CD
 
 ## 🌱 O que é
-Este repositório foi criado para demonstrar o processo de automação de testes numa API REST utilizando Postman e Newman.
+Este repositório foi criado para demonstrar o processo de automação de testes numa API Graphql utilizando Postman e Newman.
                                                                                                       
 ## 🌍 Sobre a API Geographql   
 A API Geographql oferece acesso a dados geográficos, permitindo consultas e manipulações de informações sobre países, estados e cidades.                                                    
@@ -57,7 +57,7 @@ Sinta-se à vontade para contribuir com sugestões e recomendações de aprimora
 
 ## 👥 Integrantes do Projeto
 
-| Nome             | GitHub                          | Função         |
+| Nome             | LinkedIn                         | Função         |
 |-----------------|--------------------------------|---------------|
 | 🚀 Brayan | [LinkedIn](https://www.linkedin.com/in/brayanmoncks/) | QA/Testes     |
 | 🛠 Patricia | [LinkedIn](https://www.linkedin.com/in/patricia-rosa-silva/) | QA/Testes   |
